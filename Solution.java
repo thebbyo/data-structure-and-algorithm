@@ -1,20 +1,28 @@
-package stack;
-
-import java.util.Stack;
-
 class Solution {
-    public static   int[] finalPrices(int[] prices) {
-        Stack<Integer> pr = new Stack<>();
-        for(int i =0 ;i<prices.length;i++){
-          while (!pr.isEmpty() && prices[i] <= prices[pr.peek()]) prices[pr.pop()]-=prices[i];
-          pr.push(i);
+    public static int search(int[] nums, int target) {
+        int lo = 0, hi = nums.length - 1;
+        while(hi - lo > 1){
+            int mid = (hi + lo)/2;
+            if(nums[mid] == target) return  mid;
+            //right sorted portion
+            if(nums[lo] <= nums[mid] ){
+                if(nums[mid] > target && nums[lo] <= target) hi = mid -1;
+                else lo = mid +1;
+            }
+            // left sorted portion
+            else {
+                if(nums[mid] < target && nums[hi] >= target) lo = mid +1;
+                else hi = mid-1;
+            }
+        }
+        if(nums[lo] == target) return lo;
+        else if (nums[hi] == target) return hi;
+        else return -1;
     }
-        return prices;
-}
 
     public static void main(String[] args) {
-        int[] arr = {8,4,6,2,3};
-        arr = finalPrices(arr);
-        for(int i=0; i<arr.length; i++) System.out.printf(arr[i]+" ");
+        int[] nums = {5,6,7,8,1,2,3,4};
+        int target = 1;
+        System.out.println(search(nums, target));
     }
 }
